@@ -3,22 +3,25 @@ import axios from "axios";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
-   const [sum, setSum] = useState([]);
+  const [sum, setSum] = useState(0); 
 
+  
   const fetchProduct = async () => {
     try {
       const result = await axios.get("http://localhost:3000/api/getProduct");
-      console.log(result)
       setCartItems(result.data.data); 
     } catch (error) {
       console.log("Error fetching product:", error);
     }
   };
 
+ 
   const fetchTotal = async () => {
     try {
       const result = await axios.get("http://localhost:3000/api/SumCart");
-      setTotal(result.data);
+      console.log(result)
+      setSum(result.data.data[0]["sum(price)"]); 
+
     } catch (error) {
       console.log("Error fetching total:", error);
     }
@@ -29,8 +32,6 @@ export default function Cart() {
     fetchTotal();
   }, []);
 
-  const total = cartItems.reduce((acc, item) => acc + parseFloat(item.price), 0);
-
   return (
     <div className="container mt-4">
       <h2 className="text-center">Cart</h2>
@@ -38,7 +39,7 @@ export default function Cart() {
         <p>No items in cart.</p>
       ) : (
         <>
-        <table className="table table-bordered table-striped mt-3 align-middle text-center">
+          <table className="table table-bordered table-striped mt-3 align-middle text-center">
             <thead className="table-dark">
               <tr>
                 <th>#</th>
@@ -72,7 +73,9 @@ export default function Cart() {
           </table>
 
           <div className="text-end">
-            <h4 className="text-primary fw-bold mx-3 my-4">Total: ${total.toFixed(2)}</h4>
+            <h4 className="text-primary fw-bold mx-3 my-4">
+              Total: ${sum.toFixed(2)}
+            </h4>
           </div>
         </>
       )}

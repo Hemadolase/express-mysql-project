@@ -37,9 +37,9 @@ const fetchProduct = async () => {
           <div className="col-md-4 p-3">
             <img
               src={product.image}
-              className="img-fluid rounded"
+              className="img-fluid"
               alt={product.title}
-              style={{ maxHeight: "300px", objectFit: "contain" }}
+              style={{ maxHeight: "300px" }}
             />
           </div>
           <div className="col-md-8">

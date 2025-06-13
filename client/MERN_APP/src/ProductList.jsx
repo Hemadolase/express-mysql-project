@@ -29,7 +29,7 @@ export default function Products() {
                 src={product.image}
                 className="card-img-top p-3"
                 alt={product.title}
-                style={{ height: "200px", objectFit: "contain" }}
+                style={{ height: "200px"}}
               />
               <div className="card-body d-flex flex-column justify-content-between">
                 <h6 className="card-title">{product.title}...</h6>
