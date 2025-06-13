@@ -1,0 +1,81 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function Cart() {
+  const [cartItems, setCartItems] = useState([]);
+   const [sum, setSum] = useState([]);
+
+  const fetchProduct = async () => {
+    try {
+      const result = await axios.get("http://localhost:3000/api/getProduct");
+      console.log(result)
+      setCartItems(result.data.data); 
+    } catch (error) {
+      console.log("Error fetching product:", error);
+    }
+  };
+
+  const fetchTotal = async () => {
+    try {
+      const result = await axios.get("http://localhost:3000/api/SumCart");
+      setTotal(result.data);
+    } catch (error) {
+      console.log("Error fetching total:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+    fetchTotal();
+  }, []);
+
+  const total = cartItems.reduce((acc, item) => acc + parseFloat(item.price), 0);
+
+  return (
+    <div className="container mt-4">
+      <h2 className="text-center">Cart</h2>
+      {cartItems.length === 0 ? (
+        <p>No items in cart.</p>
+      ) : (
+        <>
+        <table className="table table-bordered table-striped mt-3 align-middle text-center">
+            <thead className="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Price ($)</th>
+                <th>Description</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      width="80"
+                      height="80"
+                      style={{ objectFit: "contain" }}
+                    />
+                  </td>
+                  <td>{item.title}</td>
+                  <td>{item.price}</td>
+                  <td>{item.description}</td>
+                  <td>{item.category}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="text-end">
+            <h4 className="text-primary fw-bold mx-3 my-4">Total: ${total.toFixed(2)}</h4>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
